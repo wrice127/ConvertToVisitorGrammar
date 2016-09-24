@@ -5,6 +5,7 @@ OUTSRC_ROOT=generated_src
 OUTCLS_ROOT=classes
 PKG=org.antlr.parser.antlr4
 PKGDIR=org/antlr/parser/antlr4
+MYPKG=wrice127.ConvertToVisitorGrammar
 MYPKGDIR=wrice127/ConvertToVisitorGrammar
 SRC_ROOT=src
 
@@ -13,11 +14,14 @@ OUTCLS=$(OUTCLS_ROOT)/$(PKGDIR)
 SRC=$(SRC_ROOT)/$(MYPKGDIR)
 CLS=$(OUTCLS_ROOT)/$(MYPKGDIR)
 
-all: $(CLS)/ConvertToVisitorGrammar.class
+all: $(OUTCLS)/ANTLRv4Lexer.class $(OUTCLS)/ANTLRv4Parser.class $(CLS)/MyListener.class $(CLS)/ConvertToVisitorGrammar.class
 
 clean:
 	rm -fr $(OUTSRC_ROOT)
 	rm -fr $(OUTCLS_ROOT)
+
+test: $(CLS)/ConvertToVisitorGrammar.class
+	java -cp $(LIBANTLR):$(OUTCLS_ROOT) $(MYPKG).ConvertToVisitorGrammar $(GRMSRC)/ANTLRv4Parser.g4
 
 $(OUTSRC)/ANTLRv4Lexer.java $(OUTSRC)/ANTLRv4Lexer.tokens: $(GRMSRC)/ANTLRv4Lexer.g4
 	java -jar $(LIBANTLR) -listener -package $(PKG) -o $(OUTSRC) $(GRMSRC)/ANTLRv4Lexer.g4
@@ -40,5 +44,5 @@ $(OUTCLS)/ANTLRv4ParserBaseListener.class: $(OUTSRC)/ANTLRv4ParserBaseListener.j
 $(CLS)/MyListener.class: $(SRC)/MyListener.java $(OUTCLS)/ANTLRv4ParserBaseListener.class
 	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR):$(OUTCLS_ROOT) $(SRC)/MyListener.java
 
-$(CLS)/ConvertToVisitorGrammar.class: $(SRC)/ConvertToVisitorGrammar.java $(CLS)/MyListener.class $(OUTCLS)/ANTLRv4Lexer.class
+$(CLS)/ConvertToVisitorGrammar.class: $(SRC)/ConvertToVisitorGrammar.java
 	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR):$(OUTCLS_ROOT) $(SRC)/ConvertToVisitorGrammar.java

@@ -8,7 +8,9 @@ import org.antlr.parser.antlr4.*;
 public class ConvertToVisitorGrammar {
 
 	public static void main(String[] args) {
-		String fileName = args[1];
+		if (args.length != 1) throw new IllegalArgumentException("A grammar filename is expected as a command argument.");
+		String fileName = args[0];
+
 		try {
 			FileInputStream fis = new FileInputStream(fileName);
 			ANTLRInputStream input = new ANTLRInputStream(fis);
