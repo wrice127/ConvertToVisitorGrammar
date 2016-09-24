@@ -15,10 +15,12 @@ public class ConvertToVisitorGrammar {
 			ANTLRv4Lexer lexer = new ANTLRv4Lexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
-			ParseTree tree = parser.translationunit();
+			ParseTree tree = parser.grammarSpec();
 
-			MyVisitor visitor = new MyVisitor();
-			System.out.println(visitor.visit(tree));
+			ParseTreeWalker walker = new ParseTreeWalker();
+			MyListener myListener = new MyListener();
+			walker.walk(myListener, tree);
+			System.out.println(myListener.result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

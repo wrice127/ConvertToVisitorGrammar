@@ -13,8 +13,7 @@ OUTCLS=$(OUTCLS_ROOT)/$(PKGDIR)
 SRC=$(SRC_ROOT)/$(MYPKGDIR)
 CLS=$(OUTCLS_ROOT)/$(MYPKGDIR)
 
-all: $(OUTCLS)/ANTLRv4Parser.class $(CLS)/MyVisitor.class
-#all: $(OUTSRC)/ANTLRv4Lexer.java $(OUTSRC)/ANTLRv4Parser.java
+all: $(CLS)/ConvertToVisitorGrammar.class
 
 clean:
 	rm -fr $(OUTSRC_ROOT)
@@ -23,23 +22,23 @@ clean:
 $(OUTSRC)/ANTLRv4Lexer.java $(OUTSRC)/ANTLRv4Lexer.tokens: $(GRMSRC)/ANTLRv4Lexer.g4
 	java -jar $(LIBANTLR) -listener -package $(PKG) -o $(OUTSRC) $(GRMSRC)/ANTLRv4Lexer.g4
 
-$(OUTSRC)/ANTLRv4Parser.java $(OUTSRC)/ANTLRv4Parser.tokens: $(GRMSRC)/ANTLRv4Parser.g4 $(OUTSRC)/ANTLRv4Lexer.tokens
+$(OUTSRC)/ANTLRv4Parser.java $(OUTSRC)/ANTLRv4Parser.tokens $(OUTSRC)/ANTLRv4ParserBaseListener.java: $(GRMSRC)/ANTLRv4Parser.g4 $(OUTSRC)/ANTLRv4Lexer.tokens
 	java -jar $(LIBANTLR) -listener -package $(PKG) -o $(OUTSRC) $(GRMSRC)/ANTLRv4Parser.g4
 
 $(OUTCLS_ROOT):
 	mkdir $(OUTCLS_ROOT)
 
-$(OUTCLS)/ANTLRv4Lexer.class: $(OUTSRC)/ANTLRv4Lexer.java $(OUTSRC)/ANTLRv4Lexer.tokens $(OUTSRC)/LexerAdaptor.java $(OUTCLS_ROOT)
-	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR) -sourcepath $(OUTSRC_ROOT):$(EXTSRC) $(OUTSRC)/ANTLRv4Lexer.java
+$(OUTCLS)/ANTLRv4Lexer.class: $(OUTSRC)/ANTLRv4Lexer.java $(OUTSRC)/ANTLRv4Lexer.tokens $(OUTCLS_ROOT)
+	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR) -sourcepath $(EXTSRC) $(OUTSRC)/ANTLRv4Lexer.java
 
 $(OUTCLS)/ANTLRv4Parser.class: $(OUTSRC)/ANTLRv4Parser.java $(OUTSRC)/ANTLRv4Parser.tokens $(OUTCLS_ROOT)
-	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR) -sourcepath $(OUTSRC_ROOT):$(EXTSRC) $(OUTSRC)/ANTLRv4Parser.java
+	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR) -sourcepath $(OUTSRC_ROOT) $(OUTSRC)/ANTLRv4Parser.java
 
 $(OUTCLS)/ANTLRv4ParserBaseListener.class: $(OUTSRC)/ANTLRv4ParserBaseListener.java $(OUTCLS_ROOT)
-	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR) -sourcepath $(OUTSRC_ROOT):$(EXTSRC) $(OUTSRC)/ANTLRv4ParserBaseListener.java
+	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR) -sourcepath $(OUTSRC_ROOT) $(OUTSRC)/ANTLRv4ParserBaseListener.java
 
-$(CLS)/MyVisitor.class: $(SRC)/MyVisitor.java $(OUTCLS)/ANTLRv4ParserListener.class
-	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR):$(OUTCLS_ROOT) $(SRC)/MyVisitor.java
+$(CLS)/MyListener.class: $(SRC)/MyListener.java $(OUTCLS)/ANTLRv4ParserBaseListener.class
+	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR):$(OUTCLS_ROOT) $(SRC)/MyListener.java
 
-$(CLS)/ConvertToVisitorGrammar.class: $(SRC)/ConvertToVisitorGrammar.java $(CLS)/MyVisitor.class
+$(CLS)/ConvertToVisitorGrammar.class: $(SRC)/ConvertToVisitorGrammar.java $(CLS)/MyListener.class $(OUTCLS)/ANTLRv4Lexer.class
 	javac -d $(OUTCLS_ROOT) -cp $(LIBANTLR):$(OUTCLS_ROOT) $(SRC)/ConvertToVisitorGrammar.java
