@@ -24,6 +24,7 @@ clean:
 
 test: $(CLS)/ConvertToVisitorGrammar.class
 	java -cp $(LIBANTLR):$(OUTCLS_ROOT) $(MYPKG).ConvertToVisitorGrammar $(GRMSRC)/ANTLRv4Parser.g4
+	#java org.antlr.v4.gui.TestRig org.antlr.parser.antlr4.ANTLRv4 grammarSpec -tree $(GRMSRC)/ANTLRv4Parser.g4
 
 $(OUTSRC)/ANTLRv4Lexer.java $(OUTSRC)/ANTLRv4Lexer.tokens: $(GRMSRC)/ANTLRv4Lexer.g4
 	java -jar $(LIBANTLR) -listener -package $(PKG) -o $(OUTSRC) $(GRMSRC)/ANTLRv4Lexer.g4

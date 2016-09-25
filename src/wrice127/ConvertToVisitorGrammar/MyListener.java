@@ -10,10 +10,11 @@ public class MyListener extends ANTLRv4ParserBaseListener {
 	private boolean bInLabeledAlt = false;
 	private String label = new String();
 	private String parserRuleSpec = new String();
+	private boolean needSpacing = true;
 
 	@Override public void visitTerminal(TerminalNode node) {
 		if (node.getSymbol().getType() == Token.EOF) return;
-		result += node.getText() + " ";
+		result += node.getText() + (needSpacing ? " " : "");
 		if (bInLabeledAlt) {
 			String text = node.getText();
 			label += "_";
@@ -36,6 +37,12 @@ public class MyListener extends ANTLRv4ParserBaseListener {
 		result += "# " + parserRuleSpec + label + "\n";
 		label = "";
 		bInLabeledAlt = false;
+	}
+	@Override public void enterActionBlock(ANTLRv4Parser.ActionBlockContext ctx) {
+		needSpacing = false;
+	}
+	@Override public void exitActionBlock(ANTLRv4Parser.ActionBlockContext ctx) {
+		needSpacing = true;
 	}
 }
 
