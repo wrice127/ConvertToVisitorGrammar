@@ -12,6 +12,7 @@ public class MyListener extends ANTLRv4ParserBaseListener {
 	private String parserRuleSpec = new String();
 
 	@Override public void visitTerminal(TerminalNode node) {
+		if (node.getSymbol().getType() == Token.EOF) return;
 		result += node.getText() + " ";
 		if (bInLabeledAlt) {
 			String text = node.getText();
@@ -24,7 +25,7 @@ public class MyListener extends ANTLRv4ParserBaseListener {
 		}
 	}
 	@Override public void enterParserRuleSpec(ANTLRv4Parser.ParserRuleSpecContext ctx) {
-		parserRuleSpec = ctx.RULE_REF().getSymbol().getText();
+		parserRuleSpec = ctx.RULE_REF().getText();
 		result += "\n";
 	}
 	@Override public void enterLabeledAlt(ANTLRv4Parser.LabeledAltContext ctx) {
