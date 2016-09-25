@@ -7,9 +7,8 @@ This code depends on the other Git repository: https://github.com/antlr/grammars
 Once you clone it, you will need to modify Makefile to set where it is stored.
 
 The make file starts with these three lines:
-LIBANTLR=~/prog/antlr/antlr-4.5.3-complete.jar
-EXTSRC=~/git/grammars-v4/antlr4/src/main/java 
-GRMSRC=~/git/grammars-v4/antlr4
 
-Change "LIBANTLR" to where you stored the Antlr binary JAR file.
-Change EXTSRC and GRMSRC to where the grammar is stored.
+LIBANTLR=~/prog/antlr/antlr-4.5.3-complete.jar : change to where you stored ANTLR binary JAR.
+
+GRAMMARSv4=~/git/grammars-v4 : change to where you cloned grammars-v4
+

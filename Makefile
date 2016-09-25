@@ -1,6 +1,8 @@
 LIBANTLR=~/prog/antlr/antlr-4.5.3-complete.jar
-EXTSRC=~/git/grammars-v4/antlr4/src/main/java 
-GRMSRC=~/git/grammars-v4/antlr4
+GRAMMARSv4=~/git/grammars-v4
+
+GRMSRC=$(GRAMMARSv4)/antlr4
+EXTSRC=$(GRAMMARSv4)/antlr4/src/main/java 
 OUTSRC_ROOT=generated_src
 OUTCLS_ROOT=classes
 PKG=org.antlr.parser.antlr4
