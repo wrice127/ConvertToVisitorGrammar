@@ -8,6 +8,7 @@ public class MyListener extends ANTLRv4ParserBaseListener {
 
 	public String result = new String();
 	private boolean bInLabeledAlt = false;
+	private boolean bNeedLabel = false;
 	private String label = new String();
 	private String parserRuleSpec = new String();
 	private boolean needSpacing = true;
@@ -29,12 +30,15 @@ public class MyListener extends ANTLRv4ParserBaseListener {
 		parserRuleSpec = ctx.RULE_REF().getText();
 		result += "\n";
 	}
+	@Override public void enterRuleAltList(ANTLRv4Parser.RuleAltListContext ctx) {
+		bNeedLabel = (ctx.getChildCount() > 1);
+	}
 	@Override public void enterLabeledAlt(ANTLRv4Parser.LabeledAltContext ctx) {
 		if (bInLabeledAlt) throw new RuntimeException("Already in labeledAlt ");
 		bInLabeledAlt = true;
 	}
 	@Override public void exitLabeledAlt(ANTLRv4Parser.LabeledAltContext ctx) {
-		result += "# " + parserRuleSpec + label + "\n";
+		if (bNeedLabel) result += "# " + parserRuleSpec + label + "\n";
 		label = "";
 		bInLabeledAlt = false;
 	}
